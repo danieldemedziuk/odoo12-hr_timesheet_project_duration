@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_duration,project duration,model_project_duration,group_hr_user,1,1,1,1
+access_project_duration_timesheet,project duration timesheet,model_project_duration_timesheet,group_hr_user,1,1,1,1
+access_hr_timesheet_sheet_sheet_account,hr_timesheet_sheet sheet account,model_hr_timesheet_sheet_sheet_account,group_hr_user,1,0,0,0
