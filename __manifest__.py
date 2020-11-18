@@ -21,7 +21,6 @@ email: daniel.demedziuk@mjgroup.pl
     'depends': ['account', 'hr_timesheet_sheet', 'mail', 'contacts'],
     'data': [
         'views/project_duration_view.xml',
-        'security/hr_timesheet_project_duration_security.xml',
         'security/ir.model.access.csv',
     ],
     'auto_install': False,
