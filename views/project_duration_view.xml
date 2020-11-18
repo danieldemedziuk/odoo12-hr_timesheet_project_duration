@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <notebook>
                     <page string="List of employees">
-                        <field name="project_duration_ids" nolabel="1">
+                        <field name="proj_dur" nolabel="1">
                             <tree editable="bottom">
                                 <field name="employee"/>
                                 <field name="hours_amount"/>
