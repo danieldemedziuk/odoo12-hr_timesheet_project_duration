@@ -7,11 +7,21 @@
             <field name="model">account.analytic.account</field>
             <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
             <field name="arch" type="xml">
+                <group name="main">
+                    <group>
+                        <field name="date_start"/>
+                        <field name="date_stop"/>
+                        <field name="notes"/>
+                    </group>
+                </group>
                 <notebook>
                     <page string="List of employees">
-                        <field name="proj_dur" nolabel="1">
+                        <field name="project_druation_sheet" nolabel="1">
                             <tree editable="bottom">
                                 <field name="employee"/>
+                                <field name="assistant_exist"/>
+                                <field name="assistant" attrs="{'invisible':[('assistant_exist', '!=', True)]}"/>
+                                <field name="hours_unused"/>
                                 <field name="hours_amount"/>
                                 <field name="proj_duration_id" invisible="1"/>
                             </tree>
