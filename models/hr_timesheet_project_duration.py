@@ -14,46 +14,66 @@ class project_duration_timesheet(models.Model):
     timesheet_line = fields.Many2one('hr.analytic.timesheet', 'Timesheet line')
     project_duration_ids = fields.Many2one('project.duration', 'Project duration')
 
-    @api.multi
     def write(self, vals):
         res = super(project_duration_timesheet, self).write(vals)
-        number = 0.0
+        emp_hr = 0.0
+        assistant_hr = 0.0
+        sum_hr = 0.0
         proj_duration_hours = 0.0
-        proj_duration_unsued_h = 0.0
-        emp_name = ''
+        # proj_duration_unused_h = 0.0
         proj_duration_employee = ''
         proj_duration_assistant = ''
+        proj_dur_line = self.project_duration_ids
 
-        for rec in self:
-            c_id = rec.search_read([('user_id', '=', self._uid)])
-            # print("CURR", c_id)
-            # print("T IDS", rec.timesheet_ids)
-            # print(rec.project_duration_ids)
+        c_id = self.search_read([])
+        print("CURR", c_id)
 
-            for num in range(len(rec.timesheet_ids)):
-                number += rec.timesheet_ids[num]['unit_amount']
-                proj_name = rec.timesheet_ids[num]['account_id']['name']
-                emp_name = rec.timesheet_ids[num]['user_id']['name']
-                proj_id = rec.project_duration_ids.search(['&', '|', ('employee.user_id', '=', self._uid), ('assistant.user_id', '=', self._uid), ('proj_duration_id', '=', proj_name)])
+        for num in range(len(self.timesheet_ids)):
+            # print("T IDS", self.timesheet_ids)
+            emp_hr += self.timesheet_ids[num]['unit_amount']
+            proj_name = self.timesheet_ids[num]['account_id']['name']
+            curr_user = self.timesheet_ids[num]['user_id']['name']
+            proj_dur_line = self.project_duration_ids.search(['|', '&', ('employee.user_id', '=', self._uid), ('assistant.user_id', '=', self._uid), ('proj_duration_id', '=', proj_name)])
 
-                # print(proj_id)
-                # if proj_id['assistant_exist']:
+        for x in range(len(proj_dur_line)):
+            print("PROJECT", proj_dur_line[x]['proj_duration_id']['name'])
+            print("EXIST", proj_dur_line[x]['assistant_exist'])
 
-                proj_duration_hours = proj_id['hours_amount']
-                proj_duration_unsued_h = proj_id['hours_unused']
-                proj_duration_employee = proj_id['employee']['name']
-                proj_duration_assistant = proj_id['assistant']['name']
+            if not proj_dur_line[x]['assistant_exist']:
+                proj_duration_hours = proj_dur_line[x]['hours_amount']
+                proj_duration_employee = proj_dur_line[x]['employee']['name']
 
-                print(proj_duration_hours)
-                print(proj_duration_unsued_h)
+                print("CURR USER", curr_user)
+                print("DURAT EMP", proj_duration_employee)
+                print(emp_hr)
+                print("HOURS", proj_duration_hours)
 
-            if (((emp_name == proj_duration_employee) or (emp_name == proj_duration_assistant)) and ((number <= proj_duration_hours) or (number <= proj_duration_unsued_h)) or self.env.user.has_group('hr.group_hr_manager')):
-                return res
+                if ((curr_user == proj_duration_employee) and (emp_hr <= proj_duration_hours) or self.env.user.has_group('hr.group_hr_manager')):
+                    return res
+
+                else:
+                    raise osv.except_osv(('Warning!'),
+                                         ('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
 
             else:
-                raise osv.except_osv(('Warning!'),
-                                     ('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
+                for timesheet_id in c_id:
+                    if timesheet_id.get('employee_id')[1] == proj_dur_line[x]['assistant']['name']:
+                        proj_duration_assistant = proj_dur_line[x]['assistant']['name']
+                        print("timesheet_id", timesheet_id)
+                        print("ASSISTANT", timesheet_id.get('employee_id')[1])
+                        for timesheet_line in self.timesheet_ids:
+                            assistant_hr += timesheet_line['unit_amount']
+                        print("HR", assistant_hr)
+                        sum_hr = emp_hr + assistant_hr
+                    else:
+                        continue
 
+                if (((curr_user == proj_duration_employee) or (curr_user == proj_duration_assistant)) and (sum_hr <= proj_duration_hours) or self.env.user.has_group('hr.group_hr_manager')):
+                    return res
+
+                else:
+                    raise osv.except_osv(('Warning!'),
+                                         ('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
 
 
 class project_duration_model(models.Model):
@@ -94,6 +114,7 @@ class project_duration(models.Model):
                 else:
                     self.write({'assistant': False})
                     rec.hours_unused = rec.hours_amount - employee_hours
+
             # if (employee_hours + assistant_houts) > rec.hours_amount:
             #     raise osv.except_osv(('Warning!'),
             #                          ('The number of hours of the team exceeds the number of allowed hours.'))
