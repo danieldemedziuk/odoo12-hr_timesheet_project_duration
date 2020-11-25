@@ -3,6 +3,7 @@
 from odoo import fields, models, api
 from odoo.osv import osv
 from datetime import date
+from odoo.tools.translate import _
 
 today = date.today().strftime('%Y-%m-%d')
 
@@ -10,8 +11,8 @@ today = date.today().strftime('%Y-%m-%d')
 class project_duration_timesheet(models.Model):
     _inherit = "hr_timesheet.sheet"
 
-    projects_list = fields.Many2one('account.analytic.account', 'Projects List')
-    timesheet_line = fields.Many2one('hr.analytic.timesheet', 'Timesheet line')
+    # projects_list = fields.Many2one('account.analytic.account', 'Projects List')
+    # timesheet_line = fields.Many2one('hr.analytic.timesheet', 'Timesheet line')
     project_duration_ids = fields.Many2one('project.duration', 'Project duration')
 
     def write(self, vals):
@@ -47,8 +48,8 @@ class project_duration_timesheet(models.Model):
                     sum_hours = employee_hours + assistant_hours
 
                     if sum_hours > duration_amount:
-                        raise osv.except_osv(('Warning!'),
-                                         ('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
+                        raise osv.except_osv(_('Warning!'),
+                                         _('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
 
                 else:
                     employee_hours = 0.0
@@ -56,17 +57,17 @@ class project_duration_timesheet(models.Model):
                         employee_hours += timesheet['unit_amount']
 
                     if employee_hours > duration_amount:
-                        raise osv.except_osv(('Warning!'),
-                                             ('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
+                        raise osv.except_osv(_('Warning!'),
+                                             _('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
 
 
 class project_duration_model(models.Model):
     _inherit = "account.analytic.account"
 
     project_druation_sheet = fields.One2many('project.duration', 'proj_duration_id')
-    date_start = fields.Date(string="Start date")
-    date_stop = fields.Date(string="Stop date")
-    notes = fields.Text(string="Notes")
+    date_start = fields.Date(string="Start date", help='Start date of the project.')
+    date_stop = fields.Date(string="Stop date", help='Project completion date.')
+    notes = fields.Text(string="Notes", help='Space for a short note, description, project tasks.')
 
 
 class project_duration(models.Model):
@@ -74,8 +75,8 @@ class project_duration(models.Model):
     _description = "Project duration account"
 
     employee = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string='Employee', store=True)
-    hours_amount = fields.Float(string='Number of hours', store=True)
-    hours_unused = fields.Float(string='Hours unused', compute='check_hours_amount', readonly=True)
+    hours_amount = fields.Float(string='Number of hours', help='This is the total number of hours allocated to the employee for this project.', store=True)
+    hours_unused = fields.Float(string='Hours unused', help='This is the amount of free hours left to be used by this employee.', compute='check_hours_amount', readonly=True)
     assistant_exist = fields.Boolean(help='Is there an assistant for this employee')
     assistant = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string='Assistant')
     proj_duration_id = fields.Many2one('account.analytic.account', 'Model ID')
