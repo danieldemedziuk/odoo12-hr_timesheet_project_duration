@@ -11,8 +11,8 @@ today = date.today().strftime('%Y-%m-%d')
 class project_duration_timesheet(models.Model):
     _inherit = "hr_timesheet.sheet"
 
-    # projects_list = fields.Many2one('account.analytic.account', 'Projects List')
-    # timesheet_line = fields.Many2one('hr.analytic.timesheet', 'Timesheet line')
+    projects_list = fields.Many2one('account.analytic.account', 'Projects List')
+    timesheet_line = fields.Many2one('hr.analytic.timesheet', 'Timesheet line')
     project_duration_ids = fields.Many2one('project.duration', 'Project duration')
 
     def write(self, vals):
@@ -26,6 +26,7 @@ class project_duration_timesheet(models.Model):
 
         for c_timesheet in self.timesheet_ids.search([('user_id', '=', self._uid)]):
             curr_project = c_timesheet['account_id']['name']
+            curr_user = c_timesheet['user_id']['name']
 
             result[curr_project] = {}
 
@@ -40,6 +41,8 @@ class project_duration_timesheet(models.Model):
                     for timesheet in self.timesheet_ids.search([('account_id', '=', curr_project), ('user_id', '=', duration_employee)]):
                         employee_hours += timesheet['unit_amount']
 
+                    result[curr_project][duration_employee] = employee_hours
+
                     assistant_hours = 0.0
                     for timesheet in self.timesheet_ids.search([('account_id', '=', curr_project), ('user_id', '=', duration_assistant)]):
                         assistant_hours += timesheet['unit_amount']
@@ -49,16 +52,22 @@ class project_duration_timesheet(models.Model):
 
                     if sum_hours > duration_amount:
                         raise osv.except_osv(_('Warning!'),
-                                         _('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
+                                         _('Your number of hours per project is incorrect or has been exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
 
                 else:
                     employee_hours = 0.0
                     for timesheet in self.timesheet_ids.search([('account_id', '=', curr_project), ('user_id', '=', duration_employee)]):
                         employee_hours += timesheet['unit_amount']
 
+                    result[curr_project][duration_employee] = employee_hours
+
                     if employee_hours > duration_amount:
                         raise osv.except_osv(_('Warning!'),
-                                             _('You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
+                                         _('Your number of hours per project is incorrect or has been exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
+
+            if curr_user not in result[curr_project]:
+                raise osv.except_osv(_('Warning!'),
+                                     _('You are not on the list of employees assigned to the project. Contact the manager or administrator.'))
 
 
 class project_duration_model(models.Model):

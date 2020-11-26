@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-25 14:06+0000\n"
-"PO-Revision-Date: 2020-11-25 14:06+0000\n"
+"POT-Creation-Date: 2020-11-26 10:24+0000\n"
+"PO-Revision-Date: 2020-11-26 10:24+0000\n"
 "Last-Translator: DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2020\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -123,6 +123,11 @@ msgid "Project duration account"
 msgstr "Czas trwania projektu konto"
 
 #. module: hr_timesheet_project_duration
+#: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_hr_timesheet_sheet__projects_list
+msgid "Projects List"
+msgstr "Lista projektów"
+
+#. module: hr_timesheet_project_duration
 #: model:ir.model.fields,help:hr_timesheet_project_duration.field_account_analytic_account__notes
 msgid "Space for a short note, description, project tasks."
 msgstr "Miejsce na krótką notatkę, opis, zadania projektu."
@@ -158,21 +163,33 @@ msgid "Timesheet Sheet"
 msgstr "Karta czasu pracy"
 
 #. module: hr_timesheet_project_duration
+#: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_hr_timesheet_sheet__timesheet_line
+msgid "Timesheet line"
+msgstr "Linia czasu pracy"
+
+#. module: hr_timesheet_project_duration
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_project_duration__timesheet_sheet
 msgid "Timesheet sheet"
 msgstr "Karta czasu pracy"
 
 #. module: hr_timesheet_project_duration
-#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:51
-#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:60
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:54
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:65
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:69
 #, python-format
 msgid "Warning!"
-msgstr "Ostrzeżenie"
+msgstr "Uwaga!"
 
 #. module: hr_timesheet_project_duration
-#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:52
-#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:61
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:70
 #, python-format
-msgid "You are not on the list of employees assigned to the project or your number of hours per project is exhausted. Check the correctness of the project and number of hours or contact the administrator."
-msgstr "Nie znajdujesz się na liście pracowników przydzielonych do tego projektu lub twoja liczba godzin na projekt jest wyczerpana. Sprawdź poprawność ilości godzin lub skontaktuj się z administratorem."
+msgid "You are not on the list of employees assigned to the project. Contact the manager or administrator."
+msgstr "Nie znajdujesz się na liście pracowników przydzielonych do tego projektu. Skontaktuj się z menedżerem lub administratorem."
+
+#. module: hr_timesheet_project_duration
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:55
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:66
+#, python-format
+msgid "Your number of hours per project is incorrect or has been exhausted. Check the correctness of the project and number of hours or contact the administrator."
+msgstr "Twoja liczba godzin na projekt jest niepoprawna lub została wyczerpana. Sprawdź poprawność projektu i ilość godzin lub skontaktuj się z administratorem."
 
