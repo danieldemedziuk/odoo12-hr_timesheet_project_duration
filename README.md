@@ -24,6 +24,7 @@ For more details please contact the author:
 <a href="mailto:daniel.demedziuk@gmail.com">daniel.demedziuk@gmail.com</a>
 
 ## Technical
+Technical name: <b>hr_timesheet_project_duration</b>
 ### Depends:
 - account
 - hr
