@@ -85,7 +85,7 @@ msgstr "Data ostatniej aktualizacji"
 #. module: hr_timesheet_project_duration
 #: model_terms:ir.ui.view,arch_db:hr_timesheet_project_duration.proj_duration_form_inherit
 msgid "List of employees"
-msgstr "Lista pracowników"
+msgstr "Zespół projektowy"
 
 #. module: hr_timesheet_project_duration
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_project_duration__proj_duration_id

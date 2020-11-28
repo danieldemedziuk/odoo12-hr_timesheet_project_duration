@@ -7,13 +7,6 @@
             <field name="model">account.analytic.account</field>
             <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
             <field name="arch" type="xml">
-                <group name="main">
-                    <group>
-                        <field name="date_start"/>
-                        <field name="date_stop"/>
-                        <field name="notes"/>
-                    </group>
-                </group>
                 <notebook>
                     <page string="List of employees">
                         <field name="project_druation_sheet" nolabel="1">

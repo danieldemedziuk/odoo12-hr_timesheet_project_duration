@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from odoo import fields, models, api
@@ -74,9 +75,6 @@ class project_duration_model(models.Model):
     _inherit = "account.analytic.account"
 
     project_druation_sheet = fields.One2many('project.duration', 'proj_duration_id')
-    date_start = fields.Date(string="Start date", help='Start date of the project.')
-    date_stop = fields.Date(string="Stop date", help='Project completion date.')
-    notes = fields.Text(string="Notes", help='Space for a short note, description, project tasks.')
 
 
 class project_duration(models.Model):
