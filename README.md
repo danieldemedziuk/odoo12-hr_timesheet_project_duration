@@ -46,3 +46,5 @@ When an employee who is not on the list tries to add a project to his work card 
 When an employee who has been added to the list exceeds or incorrectly completes the number of hours per project, he will receive the following message.
 <br/>
 <img src="https://i.ibb.co/4YVZBLZ/3.png" alt="#2 Error message">
+##
+Work on the module is still in progress. All comments, code review and corrections are welcome. I reserve the right to change the concept of the module together with its appearance and functionality.
