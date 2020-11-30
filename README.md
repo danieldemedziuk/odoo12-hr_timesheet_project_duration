@@ -12,16 +12,16 @@ Each added employee may additionally have a helper who will be able to add this 
 In case of an employee with a helper added, their number of hours will be added.
 Additionally, the table shows the number of hours that the team has been assigned to use.
 
-<img src="https://i.ibb.co/3YxGNmz/1.png" alt="Timesheet Project Duration">
+For more details please contact the author:
+<a href="mailto:daniel.demedziuk@gmail.com">daniel.demedziuk@gmail.com</a>
+
+<img src="https://i.ibb.co/gZh3ZK3/c1.png" alt="Timesheet Project Duration">
 
 ### Features:
 - project team for the project
 - determining the number of hours for individual employees
 - checking the correctness of completed work cards
 - better project management
-
-For more details please contact the author:
-<a href="mailto:daniel.demedziuk@gmail.com">daniel.demedziuk@gmail.com</a>
 
 ## Technical
 Technical name: <b>hr_timesheet_project_duration</b>
@@ -46,3 +46,5 @@ When an employee who is not on the list tries to add a project to his work card 
 When an employee who has been added to the list exceeds or incorrectly completes the number of hours per project, he will receive the following message.
 <br/>
 <img src="https://i.ibb.co/4YVZBLZ/3.png" alt="#2 Error message">
+##
+Work on the module is still in progress. All comments, code review and corrections are welcome. I reserve the right to change the concept of the module together with its appearance and functionality.
