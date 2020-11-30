@@ -17,7 +17,10 @@ class project_duration_timesheet(models.Model):
     project_duration_ids = fields.Many2one('project.duration', 'Project duration')
 
     def write(self, vals):
+        project_duration_timesheet.check_project_department(self)
         project_duration_timesheet.check_project_assistant(self)
+
+
         res = super(project_duration_timesheet, self).write(vals)
 
         return res
@@ -70,6 +73,42 @@ class project_duration_timesheet(models.Model):
                 raise osv.except_osv(_('Warning!'),
                                      _('You are not on the list of employees assigned to the project. Contact the manager or administrator.'))
 
+        return True
+
+    def check_project_department(self):
+        result = {}
+
+        for c_timesheet in self.timesheet_ids.search([('user_id', '=', self._uid)]):
+            curr_project = c_timesheet['account_id']['name']
+            curr_user = c_timesheet['user_id']['name']
+
+            result[curr_project] = []
+
+            for duration in self.project_duration_ids.search([('proj_duration_id', '=', curr_project)]):
+                duration_amount = duration['hours_amount']
+                duration_department_exist = duration['department_exist']
+                duration_department = duration['department']['name']
+                result[curr_project].append({'duration_amount': duration_amount})
+
+                if duration_department_exist:
+                    sum_dep_hours = 0.0
+
+                    for employee_id in self.env['hr.employee'].search([('department_id', '=', duration_department)]):
+                        dep_emp_hours = 0.0
+
+                        for timesheet in self.timesheet_ids.search([('account_id', '=', curr_project), ('user_id', '=', employee_id['name'])]):
+                            sum_dep_hours += timesheet['unit_amount']
+                            dep_emp_hours += timesheet['unit_amount']
+
+                        result[curr_project].append({employee_id['name']: dep_emp_hours})
+                    result[curr_project].append({'department_hours': sum_dep_hours})
+
+                    if sum_dep_hours > duration_amount:
+                        raise osv.except_osv(_('Warning!'),
+                                         _('Your department has exceeded the number of hours allowed for the project or the number of hours is incorrect. Check the correctness of the project and number of hours or contact the administrator.'))
+
+        return True
+
 
 class project_duration_model(models.Model):
     _inherit = "account.analytic.account"
@@ -86,6 +125,8 @@ class project_duration(models.Model):
     hours_unused = fields.Float(string='Hours unused', help='This is the amount of free hours left to be used by this employee.', compute='check_hours_amount', readonly=True)
     assistant_exist = fields.Boolean(help='Is there an assistant for this employee')
     assistant = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string='Assistant')
+    department_exist = fields.Boolean(help='assign a department to this project team')
+    department = fields.Many2one('hr.department', string='Department')
     proj_duration_id = fields.Many2one('account.analytic.account', 'Model ID')
     timesheet_sheet = fields.Many2one('hr_timesheet.sheet', 'Timesheet sheet')
 
