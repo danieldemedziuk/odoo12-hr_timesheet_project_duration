@@ -11,7 +11,7 @@
                     <page string="List of employees">
                         <field name="project_druation_sheet" nolabel="1">
                             <tree editable="bottom">
-                                <field name="employee" options="{'no_create_edit': True}"/>
+                                <field name="employee" options="{'no_create_edit': True}" attrs="{'required':[('assistant_exist', '=', True)]}"/>
                                 <field name="assistant_exist"/>
                                 <field name="assistant" options="{'no_create_edit': True}" attrs="{'invisible':[('assistant_exist', '!=', True)]}"/>
                                 <field name="department_exist"/>

@@ -20,7 +20,6 @@ class project_duration_timesheet(models.Model):
         project_duration_timesheet.check_project_department(self)
         project_duration_timesheet.check_project_assistant(self)
 
-
         res = super(project_duration_timesheet, self).write(vals)
 
         return res
@@ -69,9 +68,9 @@ class project_duration_timesheet(models.Model):
                         raise osv.except_osv(_('Warning!'),
                                          _('Your number of hours per project is incorrect or has been exhausted. Check the correctness of the project and number of hours or contact the administrator.'))
 
-            if curr_user not in result[curr_project]:
-                raise osv.except_osv(_('Warning!'),
-                                     _('You are not on the list of employees assigned to the project. Contact the manager or administrator.'))
+            # if curr_user not in result[curr_project]:
+            #     raise osv.except_osv(_('Warning!'),
+            #                          _('You are not on the list of employees assigned to the project. Contact the manager or administrator.'))
 
         return True
 
@@ -133,7 +132,8 @@ class project_duration(models.Model):
     @api.one
     def check_hours_amount(self):
         employee_hours = 0.0
-        assistant_houts = 0.0
+        assistant_hours = 0.0
+        sum_dep_hours = 0.0
         for rec in self:
             for timesheet_id in rec.timesheet_sheet.timesheet_ids.search_read([]):
                 if (timesheet_id['employee_id'][1] == rec.employee['name']) and (timesheet_id['project_id'][1] == rec.proj_duration_id['name']):
@@ -141,8 +141,15 @@ class project_duration(models.Model):
 
                 if rec.assistant_exist:
                     if (timesheet_id['employee_id'][1] == rec.assistant['name']) and (timesheet_id['project_id'][1] == rec.proj_duration_id['name']):
-                        assistant_houts += timesheet_id['unit_amount']
-                    rec.hours_unused = rec.hours_amount - (employee_hours + assistant_houts)
+                        assistant_hours += timesheet_id['unit_amount']
+                    rec.hours_unused = rec.hours_amount - (employee_hours + assistant_hours)
+
+                if rec.department_exist:
+                    for employee_id in self.env['hr.employee'].search([('department_id', '=', rec.department['id'])]):
+                        if (timesheet_id['project_id'][1] == rec.proj_duration_id['name']) and (timesheet_id['employee_id'][1] == employee_id['name']):
+                            sum_dep_hours += timesheet_id['unit_amount']
+                    rec.hours_unused = rec.hours_amount - sum_dep_hours
+
                 else:
                     self.write({'assistant': False})
                     rec.hours_unused = rec.hours_amount - employee_hours
