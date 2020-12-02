@@ -138,9 +138,10 @@ class project_duration(models.Model):
         employee_hours = 0.0
         assistant_hours = 0.0
         sum_dep_hours = 0.0
+
         for rec in self:
             for timesheet_id in rec.timesheet_sheet.timesheet_ids.search_read([]):
-                if (timesheet_id['employee_id'][1] == rec.employee['name']) and (timesheet_id['project_id'][1] == rec.proj_duration_id['name']):
+                if (rec.employee != "") and (timesheet_id['employee_id'][1] == rec.employee['name']) and (timesheet_id['project_id'][1] == rec.proj_duration_id['name']):
                     employee_hours += timesheet_id['unit_amount']
 
                 if rec.assistant_exist:
@@ -148,12 +149,20 @@ class project_duration(models.Model):
                         assistant_hours += timesheet_id['unit_amount']
                     rec.hours_unused = rec.hours_amount - (employee_hours + assistant_hours)
 
+                else:
+                    rec.hours_unused = rec.hours_amount - employee_hours
+
                 if rec.department_exist:
                     for employee_id in self.env['hr.employee'].search([('department_id', '=', rec.department['id'])]):
                         if (timesheet_id['project_id'][1] == rec.proj_duration_id['name']) and (timesheet_id['employee_id'][1] == employee_id['name']):
                             sum_dep_hours += timesheet_id['unit_amount']
                     rec.hours_unused = rec.hours_amount - sum_dep_hours
 
-                else:
-                    self.write({'assistant': False})
-                    rec.hours_unused = rec.hours_amount - employee_hours
+    @api.onchange('assistant_exist', 'department_exist')
+    def default_value(self):
+        for rec in self:
+            if rec.assistant_exist == False:
+                rec.write({'assistant': False})
+
+            if rec.department_exist == False:
+                rec.write({'department': False})
