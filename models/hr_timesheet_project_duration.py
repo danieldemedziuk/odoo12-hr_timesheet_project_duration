@@ -128,7 +128,7 @@ class project_duration(models.Model):
     hours_unused = fields.Float(string='Hours unused', help='This is the amount of free hours left to be used by this employee.', compute='check_hours_amount', readonly=True)
     assistant_exist = fields.Boolean(help='Is there an assistant for this employee')
     assistant = fields.Many2one('hr.employee', domain=([('x_production', '=', True)]), string='Assistant')
-    department_exist = fields.Boolean(help='assign a department to this project team')
+    department_exist = fields.Boolean(help='Assign a department to this project team')
     department = fields.Many2one('hr.department', string='Department')
     proj_duration_id = fields.Many2one('account.analytic.account', 'Model ID')
     timesheet_sheet = fields.Many2one('hr_timesheet.sheet', 'Timesheet sheet')

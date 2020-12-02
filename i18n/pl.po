@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-26 10:24+0000\n"
-"PO-Revision-Date: 2020-11-26 10:24+0000\n"
+"POT-Creation-Date: 2020-12-02 12:07+0000\n"
+"PO-Revision-Date: 2020-12-02 12:07+0000\n"
 "Last-Translator: DanielDemedziuk <daniel.demedziuk@mjgroup.pl>, 2020\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,6 +41,16 @@ msgstr "Utworzona przez"
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_project_duration__create_date
 msgid "Created on"
 msgstr "Data utworzenia"
+
+#. module: hr_timesheet_project_duration
+#: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_project_duration__department
+msgid "Department"
+msgstr "Dział"
+
+#. module: hr_timesheet_project_duration
+#: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_project_duration__department_exist
+msgid "Department Exist"
+msgstr "Występuje dział"
 
 #. module: hr_timesheet_project_duration
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_project_duration__display_name
@@ -85,17 +95,12 @@ msgstr "Data ostatniej aktualizacji"
 #. module: hr_timesheet_project_duration
 #: model_terms:ir.ui.view,arch_db:hr_timesheet_project_duration.proj_duration_form_inherit
 msgid "List of employees"
-msgstr "Zespół projektowy"
+msgstr "Lista pracowników"
 
 #. module: hr_timesheet_project_duration
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_project_duration__proj_duration_id
 msgid "Model ID"
 msgstr ""
-
-#. module: hr_timesheet_project_duration
-#: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_account_analytic_account__notes
-msgid "Notes"
-msgstr "Notatki"
 
 #. module: hr_timesheet_project_duration
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_project_duration__hours_amount
@@ -106,11 +111,6 @@ msgstr "Ilość godzin"
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_account_analytic_account__project_druation_sheet
 msgid "Project Druation Sheet"
 msgstr "Karta Czasu Trwania Projektu"
-
-#. module: hr_timesheet_project_duration
-#: model:ir.model.fields,help:hr_timesheet_project_duration.field_account_analytic_account__date_stop
-msgid "Project completion date."
-msgstr "Data zakończenia projektu."
 
 #. module: hr_timesheet_project_duration
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_hr_timesheet_sheet__project_duration_ids
@@ -126,26 +126,6 @@ msgstr "Czas trwania projektu konto"
 #: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_hr_timesheet_sheet__projects_list
 msgid "Projects List"
 msgstr "Lista projektów"
-
-#. module: hr_timesheet_project_duration
-#: model:ir.model.fields,help:hr_timesheet_project_duration.field_account_analytic_account__notes
-msgid "Space for a short note, description, project tasks."
-msgstr "Miejsce na krótką notatkę, opis, zadania projektu."
-
-#. module: hr_timesheet_project_duration
-#: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_account_analytic_account__date_start
-msgid "Start date"
-msgstr "Data rozpoczęcia"
-
-#. module: hr_timesheet_project_duration
-#: model:ir.model.fields,help:hr_timesheet_project_duration.field_account_analytic_account__date_start
-msgid "Start date of the project."
-msgstr "Data rozpoczęcia projektu."
-
-#. module: hr_timesheet_project_duration
-#: model:ir.model.fields,field_description:hr_timesheet_project_duration.field_account_analytic_account__date_stop
-msgid "Stop date"
-msgstr "Data zakończenia"
 
 #. module: hr_timesheet_project_duration
 #: model:ir.model.fields,help:hr_timesheet_project_duration.field_project_duration__hours_unused
@@ -173,23 +153,35 @@ msgid "Timesheet sheet"
 msgstr "Karta czasu pracy"
 
 #. module: hr_timesheet_project_duration
-#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:54
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:30
 #: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:65
-#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:69
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:76
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:110
 #, python-format
 msgid "Warning!"
 msgstr "Uwaga!"
 
 #. module: hr_timesheet_project_duration
-#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:70
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:31
 #, python-format
 msgid "You are not on the list of employees assigned to the project. Contact the manager or administrator."
 msgstr "Nie znajdujesz się na liście pracowników przydzielonych do tego projektu. Skontaktuj się z menedżerem lub administratorem."
 
 #. module: hr_timesheet_project_duration
-#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:55
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:111
+#, python-format
+msgid "Your department has exceeded the number of hours allowed for the project or the number of hours is incorrect. Check the correctness of the project and number of hours or contact the administrator."
+msgstr "Twój dział przekroczył liczbę godzin dozwoloną dla projektu lub liczba godzin jest nieprawidłowa. Sprawdź poprawność projektu i liczbę godzin lub skontaktuj się z administratorem."
+
+#. module: hr_timesheet_project_duration
 #: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:66
+#: code:addons/hr_timesheet_project_duration/models/hr_timesheet_project_duration.py:77
 #, python-format
 msgid "Your number of hours per project is incorrect or has been exhausted. Check the correctness of the project and number of hours or contact the administrator."
 msgstr "Twoja liczba godzin na projekt jest niepoprawna lub została wyczerpana. Sprawdź poprawność projektu i ilość godzin lub skontaktuj się z administratorem."
+
+#. module: hr_timesheet_project_duration
+#: model:ir.model.fields,help:hr_timesheet_project_duration.field_project_duration__department_exist
+msgid "Assign a department to this project team"
+msgstr "Przydzielić dział do tego zespołu projektowego"
 
