@@ -138,28 +138,39 @@ class project_duration(models.Model):
         employee_hours = 0.0
         assistant_hours = 0.0
         sum_dep_hours = 0.0
-
+        print('0')
         for rec in self:
+            print('0,1')
+            print(rec.timesheet_sheet.timesheet_ids.search_read([]))
             for timesheet_id in rec.timesheet_sheet.timesheet_ids.search_read([]):
+                print('1')
                 if (rec.employee != "") and (timesheet_id['employee_id'][1] == rec.employee['name']) and (timesheet_id['project_id'][1] == rec.proj_duration_id['name']):
                     employee_hours += timesheet_id['unit_amount']
-
+                    print('2')
                 if rec.assistant_exist:
+                    print('3')
                     if (timesheet_id['employee_id'][1] == rec.assistant['name']) and (timesheet_id['project_id'][1] == rec.proj_duration_id['name']):
                         assistant_hours += timesheet_id['unit_amount']
+                        print('4')
                     rec.hours_unused = rec.hours_amount - (employee_hours + assistant_hours)
 
                 else:
+                    print('5')
                     rec.hours_unused = rec.hours_amount - employee_hours
-
+                print('6')
                 if rec.department_exist:
+                    print('7')
                     for employee_id in self.env['hr.employee'].search([('department_id', '=', rec.department['id'])]):
                         if (timesheet_id['project_id'][1] == rec.proj_duration_id['name']) and (timesheet_id['employee_id'][1] == employee_id['name']):
                             sum_dep_hours += timesheet_id['unit_amount']
+                            print('8')
                     rec.hours_unused = rec.hours_amount - sum_dep_hours
 
+            if not rec.timesheet_sheet.timesheet_ids.search_read([]):
+                rec.hours_unused = rec.hours_amount
+
     @api.onchange('assistant_exist', 'department_exist')
-    def default_value(self):
+    def _default_value(self):
         for rec in self:
             if rec.assistant_exist == False:
                 rec.write({'assistant': False})
